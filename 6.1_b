@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+
+public class MyStack<T>
+{
+    private Stack<T> stack;      // Declare a private stack for storing elements.
+    private Stack<T> minStack;   // Declare a private stack for storing minimum elements.
+
+    public MyStack()
+    {
+        stack = new Stack<T>();      // Initialize the main stack.
+        minStack = new Stack<T>();   // Initialize the stack for minimum elements.
+    }
+
+    public void Push(T x)
+    {
+        stack.Push(x);   // Add the element to the main stack.
+
+        // If the minStack is empty or the new element is less than or equal to the current minimum,
+        // push the new element onto the minStack.
+        if (minStack.Count == 0 || Comparer<T>.Default.Compare(x, minStack.Peek()) <= 0)
+        {
+            minStack.Push(x);
+        }
+
+        // Print the pushed element and the current minimum element.
+        Console.WriteLine("Pushed element: " + x);
+        Console.WriteLine("Min Element in the stack is: " + minStack.Peek());
+    }
+
+    public void Pop()
+    {
+        if (stack.Count == 0)
+        {
+            Console.WriteLine("Stack is empty");
+            return;
+        }
+
+        T popped = stack.Pop();   // Remove the top element from the main stack.
+
+        // If the popped element is the current minimum, remove it from the minStack.
+        if (Comparer<T>.Default.Compare(popped, minStack.Peek()) == 0)
+        {
+            minStack.Pop();
+        }
+    }
+
+    public T Min()
+    {
+        if (minStack.Count == 0)
+        {
+            throw new InvalidOperationException("Stack is empty");
+        }
+
+        // Return the current minimum element from the minStack.
+        return minStack.Peek();
+    }
+}
+
+public class MainClass
+{
+    public static void Main(string[] args)
+    {
+        MyStack<int> s = new MyStack<int>();   // Create an instance of MyStack for integers.
+
+        // Function calls to demonstrate the stack operations.
+        s.Push(3);
+        s.Push(5);
+        s.Push(2);
+        s.Push(1);
+
+        int minElement = s.Min();   // Get the current minimum element in the stack.
+        Console.WriteLine("Minimum Element in the stack is: " + minElement);
+
+        s.Pop();   // Pop an element from the stack.
+
+        minElement = s.Min();   // Get the new minimum element after popping.
+        Console.WriteLine("Minimum Element in the stack is: " + minElement);
+    }
+}
